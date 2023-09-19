@@ -122,18 +122,15 @@ public class BossMonster : Base_Monster
                 col.GetComponent<IBattle>()?.OnDamage(myStat.AP * 1.5f, gameObject);
             }
         }
-        //myTarget.GetComponent<IBattle>()?.OnDamage(myStat.AP * 1.5f, gameObject);
     }
 
 
     public override void OnDamage(float dmg, GameObject Attacker)
     {
         myStat.HP -= Mathf.Clamp(dmg - myStat.DP, 0, dmg);
-        //StartCoroutine(Damage_Text(damage_text, dmg));
         if (Mathf.Approximately(myStat.HP, 0.0f))
         {
             ChangeState(STATE.Dead);
-            //damage_text.gameObject.SetActive(false);
         }
         else
         {
@@ -291,7 +288,6 @@ public class BossMonster : Base_Monster
     IEnumerator Skill_1()
     {
         float time = 0.0f;
-        //myAnim.SetBool("Attack1Casting",true);
         myAnim.SetTrigger("Attack1Casting");
         attack1range.gameObject.SetActive(true);
         while (time <= 1.0f)
@@ -300,7 +296,6 @@ public class BossMonster : Base_Monster
             time += 0.1f;
             yield return new WaitForSeconds(level2 ? 0.1f : 0.2f);
         }
-        //myAnim.SetBool("Attack1Casting", false);
         myAnim.SetTrigger("Attack1CastEnd");
         attack1range.FillProgress = 0.0f;
         attack1range.gameObject.SetActive(false);
@@ -312,7 +307,6 @@ public class BossMonster : Base_Monster
     IEnumerator Skill_2()
     {
         float time = 0.0f;
-        //myAnim.SetBool("Attack2Casting", true);
         myAnim.SetTrigger("Attack2Casting");
         attack2range.gameObject.SetActive(true);
         while (time <= 1.0f)
@@ -321,7 +315,6 @@ public class BossMonster : Base_Monster
             time += 0.1f;
             yield return new WaitForSeconds(level2 ? 0.1f : 0.2f);
         }
-        //myAnim.SetBool("Attack2Casting", false);
         myAnim.SetTrigger("Attack2CastEnd");
         Attack_2();
         attack2range.FillProgress = 0.0f;

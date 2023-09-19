@@ -21,10 +21,6 @@ public abstract class Projectile : Hit_Skill
     {
         Damage = dmg;
         myTarget = target;
-        /*target.DeathAlarm += (Monster mon) =>
-        {
-            myTarget = null;
-        };*/
         StartCoroutine(Attacking(mask));
     }
     protected abstract IEnumerator Attacking(LayerMask mask);
