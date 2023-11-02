@@ -35,7 +35,6 @@ public class MagicProjectile : Hit_Skill
     {
         if (!PlayerOrBoss)
         {
-
             if (collision.gameObject.layer == 9)
             {
                 if (collision.gameObject.GetComponent<Monster>())
