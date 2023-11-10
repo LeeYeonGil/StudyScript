@@ -69,6 +69,17 @@ public class GameManager : Singleton<GameManager>
         UIManager.Instance.BossHp.SetActive(false);
     }
 
+    public void Gold_Up()
+    {
+        Gold += 1000000;
+        GoldSet();
+    }
+    public void Gold_Down()
+    {
+        Gold -= 1000000;
+        GoldSet();
+    }
+
     public void GoldSet()
     {
         UIManager.Instance.Gold = Gold;

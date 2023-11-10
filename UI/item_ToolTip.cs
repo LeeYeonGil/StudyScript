@@ -46,6 +46,9 @@ public class item_ToolTip : MonoBehaviour
         if (data.item_data != null)
         {
             Item_Name.text = data.item_data._Name; // 등급 별 텍스트 색상 변경
+            if(data.item_data.item_Type != global::Item_Type.Poiton && data.item_data.item_Type != global::Item_Type.etc) 
+            Item_Name.text += $"(+{data.Upgrade})";
+
             Item_Img.sprite = data.item_data.item_Image;
 
             switch (data.item_data.item_Grade)

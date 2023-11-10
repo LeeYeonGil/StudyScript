@@ -37,18 +37,26 @@ public class UIManager : Singleton<UIManager>
 
     public GameObject SaveWindow;
     public GameObject SettingWindow;
-    [SerializeField] bool savewindowOC = false;
-    [SerializeField] bool settingwindowOC = false;
     public GameObject SaveCheck;
     public GameObject ExitCheck;
-    [SerializeField] bool saveCheckOC = false;
-    [SerializeField] bool exitCheckOC = false;
+    public GameObject NoticeWindow;
+    public GameObject DropItemWindow;
     public SaveSlot[] slots;
 
 
     UI_Default inventory;
     UI_Default equipment;
     UI_Default tester;
+    UI_Default shop;
+
+    UI_SetLast_SetActive settingWindow;
+    UI_SetLast_SetActive savewindow;
+    UI_SetLast_SetActive savecheckwindow;
+    UI_SetLast_SetActive exitcheckwindow;
+    UI_SetLast_SetActive noticewindow;
+    UI_SetLast_SetActive dropitemwindow;
+
+    bool DontTouchCheck;
 
     PlayerUI _playerUI;
 
@@ -73,10 +81,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject Hpbar;
     public GameObject DamageText;
 
-    public GameObject NoticeWindow;
-    [SerializeField] bool NoticeWindowOC = false;
-    public GameObject DropItemWindow;
-    [SerializeField] bool DropItemWindowOC = false;
+    
 
     public Queue<HPBar> hpbars = new Queue<HPBar>();
     public Queue<DamageText> DamageTexts = new Queue<DamageText>();
@@ -107,7 +112,16 @@ public class UIManager : Singleton<UIManager>
         inventory = Inventory.GetComponent<UI_Default>();
         equipment = Equipment.GetComponent<UI_Default>();
         tester = Tester.GetComponent<UI_Default>();
+        shop = Shop.GetComponent<UI_Default>();
         _playerUI = PlayerUI.GetComponent<PlayerUI>();
+
+        settingWindow = SettingWindow.GetComponent<UI_SetLast_SetActive>();
+        savewindow = SaveWindow.GetComponent<UI_SetLast_SetActive>();
+        savecheckwindow = SaveCheck.GetComponent<UI_SetLast_SetActive>();
+        exitcheckwindow = ExitCheck.GetComponent<UI_SetLast_SetActive>();
+        noticewindow = NoticeWindow.GetComponent<UI_SetLast_SetActive>();
+        dropitemwindow = DropItemWindow.GetComponent<UI_SetLast_SetActive>();
+
     }
 
     // Update is called once per frame
@@ -122,7 +136,8 @@ public class UIManager : Singleton<UIManager>
 
     public void Hot_Key()
     {
-        if(savewindowOC || settingwindowOC || saveCheckOC || exitCheckOC) return;
+        DontTouchCheck = savewindow.OC || settingWindow.OC || savecheckwindow.OC || exitcheckwindow.OC || noticewindow.OC || dropitemwindow.OC || npc.talkchk;
+        if (DontTouchCheck) return;
         if (Input.GetKeyDown(KeyCode.I))
         {
             inventory.UI_OC();
@@ -189,26 +204,7 @@ public class UIManager : Singleton<UIManager>
         {
             Time.timeScale = 1;
         }
-        if (savewindowOC)
-        {
-            savewindowOC = false;
-            SaveWindowOC();
-        }
-        if (settingwindowOC)
-        {
-            settingwindowOC = false;
-            SettingWindowOC();
-        }
-        if (saveCheckOC)
-        {
-            saveCheckOC = false;
-            SaveCheckOC();
-        }
-        if (exitCheckOC)
-        {
-            exitCheckOC = false;
-            ExitCheckOC();
-        }
+        
         DontTouch.SetActive(esccheck);
         ESCWindow.SetActive(esccheck);
     }
@@ -225,10 +221,13 @@ public class UIManager : Singleton<UIManager>
 
     public void ShopOC()
     {
-        shopchk = !shopchk;
+        shop.UI_OC();
+        if (npc.talkchk) TalkBoxOC(!shop.OC);
+    }
 
-        TalkBox.SetActive(!shopchk);
-        Shop.SetActive(shopchk);
+    public void TalkBoxOC(bool chk)
+    {
+        TalkBox.SetActive(chk);
     }
 
    
@@ -329,50 +328,37 @@ public class UIManager : Singleton<UIManager>
         hpbars.Enqueue(hpbar);
         DamageTexts.Enqueue(text);
     }
+    public void DontTouchOC(bool chk)
+    {
+        if (DontTouchCheck) return;
+        DontTouch.transform.SetAsLastSibling();
+        DontTouch.SetActive(chk);
+    }
+
     public void SettingWindowOC()
     {
-        settingwindowOC = !settingwindowOC;
-        DontTouch.transform.SetAsLastSibling();
-        DontTouch.SetActive(settingwindowOC);
-        SettingWindow.transform.SetAsLastSibling();
-        SettingWindow.SetActive(settingwindowOC);
+        settingWindow.UI_SetLast_OC(true);
     }
     public void SaveWindowOC()
     {
-        savewindowOC = !savewindowOC;
-        DontTouch.transform.SetAsLastSibling();
-        DontTouch.SetActive(savewindowOC);
-        SaveWindow.transform.SetAsLastSibling();
-        SaveWindow.SetActive(savewindowOC);
+        savewindow.UI_SetLast_OC(true);
     }
     public void SaveCheckOC()
     {
-        saveCheckOC = !saveCheckOC;
-        DontTouch.transform.SetAsLastSibling();
-        DontTouch.SetActive(saveCheckOC);
-        SaveCheck.transform.SetAsLastSibling();
-        SaveCheck.SetActive(saveCheckOC);
+        savecheckwindow.UI_SetLast_OC(true);
     }
     public void ExitCheckOC()
     {
-        exitCheckOC = !exitCheckOC;
-        DontTouch.transform.SetAsLastSibling();
-        DontTouch.SetActive(exitCheckOC);
-        ExitCheck.transform.SetAsLastSibling();
-        ExitCheck.SetActive(exitCheckOC);
+        exitcheckwindow.UI_SetLast_OC(true);
     }
 
     public void NoticeOC()
     {
-        NoticeWindowOC = !NoticeWindowOC;
-        NoticeWindow.SetActive(NoticeWindowOC);
-        NoticeWindow.transform.SetAsLastSibling();
+        noticewindow.UI_SetLast_OC(false);
     }
 
     public void DropItemOC()
     {
-        DropItemWindowOC = !DropItemWindowOC;
-        DropItemWindow.SetActive(DropItemWindowOC);
-        DropItemWindow.transform.SetAsLastSibling();
+        dropitemwindow.UI_SetLast_OC(false);
     }
 }

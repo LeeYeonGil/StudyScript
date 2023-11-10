@@ -8,6 +8,7 @@ public class UI_Default : MonoBehaviour
     public Vector3 orgPos;
     public RectTransform rectTransform;
     public bool OC = false;
+    public bool USEESC = true;
     public virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -19,7 +20,8 @@ public class UI_Default : MonoBehaviour
     {
         gameObject.transform.localPosition = orgPos;
         OC = !OC;
-        if (UIManager.Instance.items.Count > 0) UIManager.Instance.UIOC(this);
+        if (UIManager.Instance.items.Count > 0 && USEESC) UIManager.Instance.UIOC(this);
+        gameObject.transform.SetAsLastSibling();
         gameObject.SetActive(OC);
     }
 

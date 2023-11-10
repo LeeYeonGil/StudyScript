@@ -20,7 +20,7 @@ public class PotionSlot : Slot
 
     private void Awake()
     {
-        _myUI = transform.root.GetChild(0).GetChild(1).GetChild(1).GetComponent<PlayerUI>();
+        _myUI = UIManager.Instance.playerUI;
         inventory = UIManager.Instance.Inventory.GetComponent<Inventory>();
         equipment = UIManager.Instance.Equipment.GetComponent<Equipment>();
         orgColor = item_img.color;

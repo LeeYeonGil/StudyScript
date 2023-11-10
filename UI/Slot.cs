@@ -16,12 +16,15 @@ public class Slot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerE
     public bool equipchk = false;
     protected Inventory inventory;
     protected Equipment equipment;
+    Slot_Item child_slot_item;
+
 
     private void Awake()
     {
         _myUI = UIManager.Instance.playerUI.GetComponent<PlayerUI>();//transform.root.GetChild(0).GetChild(1).GetChild(1)
         inventory = UIManager.Instance.Inventory.GetComponent<Inventory>();
         equipment = UIManager.Instance.Equipment.GetComponent<Equipment>();
+        child_slot_item = GetComponentInChildren<Slot_Item>();
     }
 
     //슬롯에 아이템 종류를 넣고 인벤토리는 모든 종류를 체크
@@ -32,14 +35,19 @@ public class Slot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerE
         Slot_Item slot_item = transform.GetComponentInChildren<Slot_Item>(); // 놓는 위치
         if (!drag_item.GetComponent<Slot_Item>()) return;
         Slot_Item swap_item = eventData.pointerDrag.transform.GetComponent<Slot_Item>(); // 가져가는 이미지
+
+        //ItemData
+        Item_Data Slot_item_data = slot_item._Item.item_data;
+        Item_Data Swap_item_data = swap_item._Item.item_data;
+
         //Item temp_item;
-        if (swap_item._Item.item_data != null)
+        if (Swap_item_data != null) // 바꾸는 아이템 유무
         {
-            if (slot_item._Item.item_data != null) // 놓는 위치에 아이템 있을 때
+            if (Slot_item_data != null) // 놓는 위치에 아이템 있을 때
             {
-                if (swap_item._Item.item_data.item_Type == slot_item._Item.item_data.item_Type) // 타입이 같은지 나중에 변경 주로 장비에서 사용
+                if (Swap_item_data.item_Type == Slot_item_data.item_Type) // 타입이 같은지 나중에 변경 주로 장비에서 사용
                 {
-                    if (swap_item._Item.item_data.item_Type == Item_Type.Poiton && swap_item._Item.item_data.name == slot_item._Item.item_data.name) // 포션 합치기(이름이 같을 때)
+                    if (Swap_item_data.item_Type == Item_Type.Poiton && Swap_item_data.name == Slot_item_data.name) // 포션 합치기(이름이 같을 때)
                     {
                         if (slot_item._Item.Count >= 99)
                         {
@@ -67,7 +75,7 @@ public class Slot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerE
 
                                 Swapitem(ref slot_item._Item, ref swap_item._Item);
 
-                                swap_item._Item.item_data = null;
+                                Swap_item_data = null;
                                 swap_item.Item_Set(swap_item._Item);
                                 slot_item.Item_Set(slot_item._Item);
                                 break;
@@ -96,11 +104,11 @@ public class Slot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerE
             {
                 for (int i = 0; i < item_Types.Length; i++)
                 {
-                    if (swap_item._Item.item_data.item_Type == item_Types[i]) // 타입이 같은지 >> 장비
+                    if (Swap_item_data.item_Type == item_Types[i]) // 타입이 같은지 >> 장비
                     {
                         Swapitem(ref slot_item._Item, ref swap_item._Item);
 
-                        swap_item._Item.item_data = null;
+                        Swap_item_data = null;
                         swap_item.Item_Set(swap_item._Item);
                         slot_item.Item_Set(slot_item._Item);
                         break;
@@ -131,14 +139,14 @@ public class Slot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerE
 
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
-        if (GetComponentInChildren<Slot_Item>() && GetComponentInChildren<Slot_Item>()._Item.item_data != null)
+        if (child_slot_item && child_slot_item._Item.item_data != null)
         {
             _myUI.tooltip.Active();
             _myUI.tooltip.gameObject.transform.SetAsLastSibling();
             _myUI.tooltip.transform.position = new Vector3(transform.position.x + 270.0f, transform.position.y - 60.0f, transform.position.z);
-            if (GetComponentInChildren<Slot_Item>()._Item.item_data != null)
+            if (child_slot_item._Item.item_data != null)
             {
-                _myUI.tooltip.Set_Item_Info(GetComponentInChildren<Slot_Item>()._Item); // 수정
+                _myUI.tooltip.Set_Item_Info(child_slot_item._Item); // 수정
             }
             else
             {
@@ -150,7 +158,7 @@ public class Slot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerE
 
     public virtual void OnPointerExit(PointerEventData eventData)
     {
-        if (GetComponentInChildren<Slot_Item>())
+        if (child_slot_item)
         {
             _myUI.tooltip.InActive();
         }

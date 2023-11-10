@@ -1,19 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
-public class Shop : MonoBehaviour
+public class Shop : UI_Default
 {
     [SerializeField]Inventory inventory;
 
-    private void OnEnable()
+    public override void UI_OC()
     {
-        inventory.OC = true;
-        inventory.gameObject.SetActive(true);
-    }
-    private void OnDisable()
-    {
-        inventory.OC = false;
-        inventory.gameObject.SetActive(false);
+       base.UI_OC();
+       inventory.gameObject.SetActive(OC);
+       if (OC) UIManager.Instance.TalkBoxOC(!OC);
     }
 }

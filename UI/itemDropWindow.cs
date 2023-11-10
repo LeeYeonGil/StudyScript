@@ -4,7 +4,7 @@ using System.ComponentModel;
 using TMPro;
 using UnityEngine;
 
-public class itemDropWindow : MonoBehaviour
+public class itemDropWindow : UI_SetLast_SetActive
 {
     public TMP_Text Item_Name;
     Slot_Item slot;
