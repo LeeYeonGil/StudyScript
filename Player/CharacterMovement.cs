@@ -9,6 +9,7 @@ using UnityEngine.UIElements;
 
 public class CharacterMovement : CharacterProperty
 {
+    [SerializeField] bool mons = false;
     Coroutine moveCo = null;
     Coroutine rotCo = null;
     Coroutine attackCo = null;
@@ -88,7 +89,7 @@ public class CharacterMovement : CharacterProperty
         if(talk) myAnim.SetBool("IsMoving", false);
         while (Angle > 0.0f) // bosschk? Angle > 0.0f : true
         {
-            if (!myAnim.GetBool("IsAttacking") && !myAnim.GetBool("IsSkill"))
+            if (mons ? !myAnim.GetBool("IsAttacking") : !myAnim.GetBool("IsAttacking") && !myAnim.GetBool("IsSkill"))
             {
                 float delta = myStat.RotSpeed * Time.deltaTime;
                 if (delta > Angle)
@@ -119,8 +120,7 @@ public class CharacterMovement : CharacterProperty
                 myAnim.SetBool("IsMoving", false);
                 yield break;
             }
-
-            if (!myAnim.GetBool("IsAttacking") && !myAnim.GetBool("IsSkill"))
+            if (mons ? !myAnim.GetBool("IsAttacking") : !myAnim.GetBool("IsAttacking") && !myAnim.GetBool("IsSkill"))
             {
                 float delta = myStat.MoveSpeed * modifyMoveSpeed  * Time.deltaTime;
                 if (delta > dist)
@@ -157,7 +157,7 @@ public class CharacterMovement : CharacterProperty
                 {
                     delta = dist;
                 }
-                if (!myAnim.GetBool("IsAttacking") && !myAnim.GetBool("IsSkill"))
+                if (mons ? !myAnim.GetBool("IsAttacking") : !myAnim.GetBool("IsAttacking") && !myAnim.GetBool("IsSkill"))
                 {
                     transform.Translate(dir * delta, Space.World);
                 }
@@ -184,7 +184,8 @@ public class CharacterMovement : CharacterProperty
             {
                 delta = Angle;
             }
-            if (!myAnim.GetBool("IsAttacking") && !myAnim.GetBool("IsSkill"))
+            
+            if (mons ? !myAnim.GetBool("IsAttacking") : !myAnim.GetBool("IsAttacking") && !myAnim.GetBool("IsSkill"))
             {
                 transform.Rotate(Vector3.up * delta * rotDir, Space.World);
             }

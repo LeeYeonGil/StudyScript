@@ -11,6 +11,7 @@ public struct Item
     [SerializeField] float DP;
     [SerializeField] float AS;
     [SerializeField] float SP;
+    [SerializeField] int upgrade;
     [SerializeField] int count;
     public Item_Data item_data
     {
@@ -36,6 +37,11 @@ public struct Item
     {
         get => SP;
         set => SP = value;
+    }
+    public int Upgrade
+    {
+        get => upgrade;
+        set => upgrade = value;
     }
     public int Count
     {
